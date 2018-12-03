@@ -1,0 +1,2 @@
+/bin/chromedriver filter=lfs diff=lfs merge=lfs -text
+/bin/headless-chromium filter=lfs diff=lfs merge=lfs -text
