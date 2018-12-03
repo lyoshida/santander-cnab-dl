@@ -4,4 +4,3 @@ zip:
 	rm bin/headless-chromium
 unzip:
 	unzip bin/chromedriver.zip -d .
-	rm bin/chromedriver.zip
