@@ -7,6 +7,7 @@ from enum import Enum
 import selenium
 from config import DOWNLOAD_FOLDER, CHROMEDRIVER_PATH, API_KEY
 from helpers import parse_date, save_to_s3, list_filenames, delete_file
+from monitor import MonitorApi
 from santander import Santander, MainMenu, TransferenciaArquivosMenu
 
 
@@ -53,6 +54,7 @@ def download(event, context):
     data = json.loads(event['body'])
 
     try:
+        monitor_id = data['monitor_id']
         agencia = data['agencia'].replace('-', '')
         conta = data['conta'].replace('-', '')
         user = data['user']
@@ -121,6 +123,8 @@ def download(event, context):
                 filename=filename,
                 content=file_content
             )
+
+        monitor = MonitorApi
 
     for filename in files:
         delete_file(filename)

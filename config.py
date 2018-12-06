@@ -12,3 +12,7 @@ API_KEY = os.environ.get('API_KEY')
 ACCESS_KEY = os.environ.get('ACCESS_KEY')
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
+# API
+MONITOR_URL = os.environ.get('MONITOR_URL')
+MONITOR_GRAPHQL_URL = f'{MONITOR_URL}/graphql'
+MONITOR_API_KEY = os.environ.get('MONITOR_API_KEY')

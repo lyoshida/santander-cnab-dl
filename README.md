@@ -42,6 +42,7 @@ Use the `prod` stage on production
 Post request:
 ```
 {
+    "monitor_id": "k478dvkljcx874g==",
     "agencia": "4040", # Only digits
     "conta": "338301", # Only digits
     "user": "USER",
@@ -62,8 +63,11 @@ The layout key can be found on Transferência de arquivos → Retorno → Consul
 API_KEY=[api_key]
 PATH=/var/task/bin:/var/task
 BUCKET=[bucket_name] # example 'storage.access55.com'
-ACCESS_KEY=[aws_access_key]
-SECRET_KEY=[aws_secret_key]
+CHROMEDRIVER_PATH=[]
+ACCESS_KEY=
+SECRET_KEY=
+MONITOR_URL=
+MONITOR_API_KEY=
 ```
 
 ### configuration

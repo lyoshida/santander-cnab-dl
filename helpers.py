@@ -31,7 +31,7 @@ def save_to_s3(path: str, filename: str, content: str, bucket: str = BUCKET):
     """
 
     client = boto3.client('s3', aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY)
-    file = '{}/{}'.format(path, filename)
+    file = f'{path}/{filename}'
     client.put_object(Bucket=bucket, Key=file, Body=content)
 
 
@@ -58,4 +58,4 @@ def delete_file(path: str):
     :return: None
     """
 
-    os.remove('{}/{}'.format(DOWNLOAD_FOLDER, path))
+    os.remove(f'{DOWNLOAD_FOLDER}/{path}')
