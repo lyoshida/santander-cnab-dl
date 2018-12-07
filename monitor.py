@@ -1,8 +1,11 @@
 import json
+import logging
 
 import requests
+from config import MONITOR_API_KEY, MONITOR_GRAPHQL_URL
 
-from config import MONITOR_API_KEY, MONITOR_URL, MONITOR_GRAPHQL_URL
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 class HttpClient:
@@ -75,7 +78,10 @@ class MonitorApi:
         self._api_key = monitor_api_key
 
     def create_cnab_file(self, monitor_id: str, content: [str]):
-        return HttpClient.post_json(self._url, data={'query': {'monitor_id': monitor_id, 'content': content}})
+
+        payload = {'query': {'monitor_id': monitor_id, 'content': content}}
+        logger.info(f'Sending payload: {payload}')
+        return HttpClient.post_json(self._url, data=payload)
 
 
 

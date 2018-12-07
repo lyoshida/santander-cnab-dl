@@ -113,10 +113,10 @@ def download(event, context):
     logger.info('files in /tmp')
     logger.info(list_filenames('/tmp'))
 
-    logger.info('Files found: {}'.format(str(files)))
+    logger.info(f'Files found: {str(files)}')
     for filename in files:
-        logger.info('Reading {}'.format(filename))
-        with open('{}/{}'.format(DOWNLOAD_FOLDER, filename)) as file:
+        logger.info(f'Reading {filename}')
+        with open(f'{DOWNLOAD_FOLDER}/{filename}') as file:
             file_content = file.read()
             save_to_s3(
                 path='033_' + agencia + '_' + conta,
@@ -124,7 +124,15 @@ def download(event, context):
                 content=file_content
             )
 
-        monitor = MonitorApi
+            content = []
+            for line in file.readlines():
+                content.append(line)
+                logger.info('Trying to connect to monitor-api...')
+                monitor_response = json.loads(MonitorApi().create_cnab_file(monitor_id, content).content)
+                if monitor_response['status'] == 'SUCCESS':
+                    logger.info(monitor_response['message'])
+                else:
+                    logger.error(f'Could not save file on Monitor. {monitor_response["message"]}')
 
     for filename in files:
         delete_file(filename)
