@@ -20,7 +20,7 @@ def parse_date(date_str: str) -> date:
     return datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
 
 
-def save_to_s3(path: str, filename: str, content: str, bucket: str = BUCKET):
+def save_to_s3(path: str, filename: str, content: bytes, bucket: str = BUCKET):
     """
     Save file to S3
     :param path:
@@ -33,6 +33,7 @@ def save_to_s3(path: str, filename: str, content: str, bucket: str = BUCKET):
     client = boto3.client('s3', aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY)
     file = f'{path}/{filename}'
     client.put_object(Bucket=bucket, Key=file, Body=content)
+    client.upload_file(f'{DOWNLOAD_FOLDER}/{filename}', bucket, file)
 
 
 def list_filenames(folder_path: str = '.', extensions: [str] = None) -> [str]:

@@ -79,7 +79,15 @@ class MonitorApi:
 
     def create_cnab_file(self, monitor_id: str, content: [str]):
 
-        payload = {'query': {'monitor_id': monitor_id, 'content': content}}
+        query = """mutation createCnabFile($monitorId: ID!, $content: [String]!) {
+            createCnabFile(monitorId: $monitorId, content: $content) {
+                status
+                message
+            }
+        }
+        """
+
+        payload = {'query': query, 'variables': {'monitorId': monitor_id, "content": content}}
         logger.info(f'Sending payload: {payload}')
         return HttpClient.post_json(self._url, data=payload)
 

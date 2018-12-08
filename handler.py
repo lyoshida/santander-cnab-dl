@@ -115,24 +115,30 @@ def download(event, context):
 
     logger.info(f'Files found: {str(files)}')
     for filename in files:
-        logger.info(f'Reading {filename}')
-        with open(f'{DOWNLOAD_FOLDER}/{filename}') as file:
+        logger.info(f'Reading {DOWNLOAD_FOLDER}/{filename}')
+        with open(f'{DOWNLOAD_FOLDER}/{filename}', 'rb') as file:
             file_content = file.read()
+            logging.info(f'file.read(): {file_content}')
             save_to_s3(
                 path='033_' + agencia + '_' + conta,
                 filename=filename,
                 content=file_content
             )
+            logging.info(f'Saved {filename} to S3')
+            content = file_content.decode('utf-8').split('\r\n')
 
-            content = []
-            for line in file.readlines():
-                content.append(line)
-                logger.info('Trying to connect to monitor-api...')
-                monitor_response = json.loads(MonitorApi().create_cnab_file(monitor_id, content).content)
-                if monitor_response['status'] == 'SUCCESS':
+            logger.info('Trying to connect to monitor-api...')
+            monitor_response_raw = MonitorApi().create_cnab_file(monitor_id, content).content
+            monitor_response = json.loads(monitor_response_raw)
+            logger.info(monitor_response)
+
+            if 'errors' in monitor_response:
+                logger.error(monitor_response['errors'])
+            else:
+                if monitor_response['data']['createCnabFile']['status']:
                     logger.info(monitor_response['message'])
                 else:
-                    logger.error(f'Could not save file on Monitor. {monitor_response["message"]}')
+                    logger.error(f'Could not save file on Monitor. {monitor_response["data"]["createCnabFile"]["message"]}')
 
     for filename in files:
         delete_file(filename)
